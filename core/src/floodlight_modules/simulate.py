@@ -171,16 +171,15 @@ class Simulate:
 							#flood to hosts
 							for mac in self.hosts_data:
 								host = self.hosts_data[mac]
-								for point in host.get('attachmentPoint', []):
-									sw = host['attachmentPoint'][point]
-									if sw.get('switchDPID', None) == now:
-										logger.debug('Flood out a port to host.')
-										#to host, so don't need to copy packet
-										nexthop.append( ( [ {'dpid': src_dpid,
-															 'port': now},
-															 {'mac': mac} ]
+								sw = host.get('location', None)
+                                if sw is not None and sw.get('dpid', None) == now:
+									logger.debug('Flood out a port to host.')
+									#to host, so don't need to copy packet
+									nexthop.append( ( [ {'dpid': src_dpid,
+														 'port': sw.get('port', '-1')},
+														 {'mac': mac} ]
 															 , None) )
-										break
+									break
 						except:
 							logger.warning('Get links or ingressPort error!')
 					elif o_port >= 0 :
@@ -200,17 +199,16 @@ class Simulate:
 							#output to hosts
 							for mac in self.hosts_data:
 								host = self.hosts_data[mac]
-								for point in host.get('attachmentPoint', []):
-									sw = host['attachmentPoint'][point]
-									if sw.get('switchDPID', None) == now and \
-									   int(sw.get('port', -5566)) == o_port:
-										logger.debug('Flood out a port to host.')
-										#to host, so don't need to copy packet
-										nexthop.append( ( [ {'dpid': src_dpid,
-															 'port': now},
-															 {'mac': mac} ]
-															 , None) )
-										break
+								sw = host.get('location', None)
+                                if sw is not None and sw.get('dpid', None) == now and \
+								   int(sw.get('port', -5566)) == o_port:
+								    logger.debug('Flood out a port to host.')
+									#to host, so don't need to copy packet
+									nexthop.append( ( [ {'dpid': now,
+														 'port': o_port},
+														 {'mac': mac} ]
+														, None) )
+									break
 						except:
 							logger.warning('Get links or ingressPort error!')
 					else:
