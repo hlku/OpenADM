@@ -172,7 +172,7 @@ class Simulate:
 							for mac in self.hosts_data:
 								host = self.hosts_data[mac]
 								sw = host.get('location', None)
-                                if sw is not None and sw.get('dpid', None) == now:
+								if sw is not None and sw.get('dpid', None) == now:
 									logger.debug('Flood out a port to host.')
 									#to host, so don't need to copy packet
 									nexthop.append( ( [ {'dpid': now,
@@ -200,7 +200,7 @@ class Simulate:
 							for mac in self.hosts_data:
 								host = self.hosts_data[mac]
 								sw = host.get('location', None)
-                                if sw is not None and sw.get('dpid', None) == now and \
+								if sw is not None and sw.get('dpid', None) == now and \
 								   int(sw.get('port', -5566)) == o_port:
 								    logger.debug('Flood out a port to host.')
 									#to host, so don't need to copy packet
