@@ -175,10 +175,10 @@ class Simulate:
                                 if sw is not None and sw.get('dpid', None) == now:
 									logger.debug('Flood out a port to host.')
 									#to host, so don't need to copy packet
-									nexthop.append( ( [ {'dpid': src_dpid,
+									nexthop.append( ( [ {'dpid': now,
 														 'port': sw.get('port', '-1')},
 														 {'mac': mac} ]
-															 , None) )
+														, None) )
 									break
 						except:
 							logger.warning('Get links or ingressPort error!')
@@ -205,7 +205,7 @@ class Simulate:
 								    logger.debug('Flood out a port to host.')
 									#to host, so don't need to copy packet
 									nexthop.append( ( [ {'dpid': now,
-														 'port': o_port},
+														 'port': str(o_port)},
 														 {'mac': mac} ]
 														, None) )
 									break
