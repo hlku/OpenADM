@@ -184,6 +184,7 @@ class Simulate:
 							logger.warning('Get links or ingressPort error!')
 					elif o_port >= 0 :
 						try:
+							found = False
 							#output to switches
 							for (src_dpid, src_port, dst_dpid, dst_port) in self.links_data:
 								if src_dpid == now and o_port == int(src_port) and i_port != int(src_port):
@@ -195,20 +196,22 @@ class Simulate:
 														{'dpid': dst_dpid,
 														 'port': dst_port} ]
 														, nx_pkt) )
+									found = True
 									break
 							#output to hosts
-							for mac in self.hosts_data:
-								host = self.hosts_data[mac]
-								sw = host.get('location', None)
-								if sw is not None and sw.get('dpid', None) == now and \
-								   int(sw.get('port', -5566)) == o_port:
-								    logger.debug('Flood out a port to host.')
-									#to host, so don't need to copy packet
-									nexthop.append( ( [ {'dpid': now,
-														 'port': str(o_port)},
-														 {'mac': mac} ]
-														, None) )
-									break
+							if not found:
+								for mac in self.hosts_data:
+									host = self.hosts_data[mac]
+									sw = host.get('location', None)
+									if sw is not None and sw.get('dpid', None) == now and \
+										int(sw.get('port', -5566)) == o_port:
+										logger.debug('Flood out a port to host.')
+										#to host, so don't need to copy packet
+										nexthop.append( ( [ {'dpid': now,
+															 'port': str(o_port)},
+															 {'mac': mac} ]
+															, None) )
+										break
 						except:
 							logger.warning('Get links or ingressPort error!')
 					else:
