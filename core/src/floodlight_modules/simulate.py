@@ -163,9 +163,9 @@ class Simulate:
 									logger.debug('Flood out a port to switch.')
 									nx_pkt = copy.deepcopy(now_pkt)
 									nx_pkt['ingressPort'] = dst_port
-									nexthop.append( ( [ {'uid': src_dpid,
+									nexthop.append( ( [ {'dpid': src_dpid,
 														 'port': src_port},
-														{'uid': dst_dpid,
+														{'dpid': dst_dpid,
 														 'port': dst_port} ]
 														, nx_pkt) )
 							#flood to hosts
@@ -173,10 +173,11 @@ class Simulate:
 								host = self.hosts_data[pair]
                                 mac = pair[1]
 								sw = host.get('location', None)
-								if sw is not None and sw.get('dpid', None) == now:
+								if sw is not None and (sw.get('dpid', None) == now or 
+                                                       sw.get('elementId', None) == now):
 									logger.debug('Flood out a port to host.')
 									#to host, so don't need to copy packet
-									nexthop.append( ( [ {'uid': now,
+									nexthop.append( ( [ {'dpid': now,
 														 'port': sw.get('port', '-1')},
 														 {'mac': mac} ]
 														, None) )
@@ -192,7 +193,7 @@ class Simulate:
 									logger.debug('Output a port.')
 									nx_pkt = copy.deepcopy(now_pkt)
 									nx_pkt['ingressPort'] = dst_port
-									nexthop.append( ( [ {'uid': src_dpid,
+									nexthop.append( ( [ {'dpid': src_dpid,
 														 'port': src_port},
 														{'uid': dst_dpid,
 														 'port': dst_port} ]
@@ -205,11 +206,12 @@ class Simulate:
 									host = self.hosts_data[pair]
                                     mac = pair[1]
 									sw = host.get('location', None)
-									if sw is not None and sw.get('dpid', None) == now and \
+									if sw is not None and (sw.get('dpid', None) == now or\
+                                                           sw.get('elementId', None) == now) and \
 										int(sw.get('port', -5566)) == o_port:
 										logger.debug('Flood out a port to host.')
 										#to host, so don't need to copy packet
-										nexthop.append( ( [ {'uid': now,
+										nexthop.append( ( [ {'dpid': now,
 															 'port': str(o_port)},
 															 {'mac': mac} ]
 															, None) )
@@ -240,7 +242,7 @@ class Simulate:
 		for (lctrl, sid, sp, did, dp) in links:
 			if lctrl == ctrl:
 				self.links_data.append( (sid, sp, did, dp) )
-				self.links_data.append( (did, dp, sid, sp) ) #reverse to let it be directional
+				#self.links_data.append( (did, dp, sid, sp) ) #reverse to let it be directional
 		self.hosts_data = self.getAllHosts()
 
 		#Now use BFS-like to visit all related switches
