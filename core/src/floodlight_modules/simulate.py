@@ -171,10 +171,10 @@ class Simulate:
 							#flood to hosts
 							for pair in self.hosts_data:
 								host = self.hosts_data[pair]
-                                mac = pair[1]
+								mac = pair[1]
 								sw = host.get('location', None)
-								if sw is not None and (sw.get('dpid', None) == now or 
-                                                       sw.get('elementId', None) == now):
+								if sw is not None and (sw.get('dpid', None) == now or\
+													sw.get('elementId', None) == now):
 									logger.debug('Flood out a port to host.')
 									#to host, so don't need to copy packet
 									nexthop.append( ( [ {'dpid': now,
@@ -204,11 +204,11 @@ class Simulate:
 							if not found:
 								for pairc in self.hosts_data:
 									host = self.hosts_data[pair]
-                                    mac = pair[1]
+									mac = pair[1]
 									sw = host.get('location', None)
 									if sw is not None and (sw.get('dpid', None) == now or\
-                                                           sw.get('elementId', None) == now) and \
-										int(sw.get('port', -5566)) == o_port:
+														sw.get('elementId', None) == now) and \
+														int(sw.get('port', -5566)) == o_port:
 										logger.debug('Flood out a port to host.')
 										#to host, so don't need to copy packet
 										nexthop.append( ( [ {'dpid': now,
