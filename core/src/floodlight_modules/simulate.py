@@ -163,19 +163,20 @@ class Simulate:
 									logger.debug('Flood out a port to switch.')
 									nx_pkt = copy.deepcopy(now_pkt)
 									nx_pkt['ingressPort'] = dst_port
-									nexthop.append( ( [ {'dpid': src_dpid,
+									nexthop.append( ( [ {'uid': src_dpid,
 														 'port': src_port},
-														{'dpid': dst_dpid,
+														{'uid': dst_dpid,
 														 'port': dst_port} ]
 														, nx_pkt) )
 							#flood to hosts
-							for mac in self.hosts_data:
-								host = self.hosts_data[mac]
+							for pair in self.hosts_data:
+								host = self.hosts_data[pair]
+                                mac = pair[1]
 								sw = host.get('location', None)
 								if sw is not None and sw.get('dpid', None) == now:
 									logger.debug('Flood out a port to host.')
 									#to host, so don't need to copy packet
-									nexthop.append( ( [ {'dpid': now,
+									nexthop.append( ( [ {'uid': now,
 														 'port': sw.get('port', '-1')},
 														 {'mac': mac} ]
 														, None) )
@@ -191,23 +192,24 @@ class Simulate:
 									logger.debug('Output a port.')
 									nx_pkt = copy.deepcopy(now_pkt)
 									nx_pkt['ingressPort'] = dst_port
-									nexthop.append( ( [ {'dpid': src_dpid,
+									nexthop.append( ( [ {'uid': src_dpid,
 														 'port': src_port},
-														{'dpid': dst_dpid,
+														{'uid': dst_dpid,
 														 'port': dst_port} ]
 														, nx_pkt) )
 									found = True
 									break
 							#output to hosts
 							if not found:
-								for mac in self.hosts_data:
-									host = self.hosts_data[mac]
+								for pairc in self.hosts_data:
+									host = self.hosts_data[pair]
+                                    mac = pair[1]
 									sw = host.get('location', None)
 									if sw is not None and sw.get('dpid', None) == now and \
 										int(sw.get('port', -5566)) == o_port:
 										logger.debug('Flood out a port to host.')
 										#to host, so don't need to copy packet
-										nexthop.append( ( [ {'dpid': now,
+										nexthop.append( ( [ {'uid': now,
 															 'port': str(o_port)},
 															 {'mac': mac} ]
 															, None) )
