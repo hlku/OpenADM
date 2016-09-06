@@ -242,7 +242,7 @@ class Simulate:
 		for (lctrl, sid, sp, did, dp) in links:
 			if lctrl == ctrl:
 				self.links_data.append( (sid, sp, did, dp) )
-				#self.links_data.append( (did, dp, sid, sp) ) #reverse to let it be directional
+				self.links_data.append( (did, dp, sid, sp) ) #reverse to let it be directional
 		self.hosts_data = self.getAllHosts()
 
 		#Now use BFS-like to visit all related switches
