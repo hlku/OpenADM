@@ -195,7 +195,7 @@ class Simulate:
 									nx_pkt['ingressPort'] = dst_port
 									nexthop.append( ( [ {'dpid': src_dpid,
 														 'port': src_port},
-														{'uid': dst_dpid,
+														{'dpid': dst_dpid,
 														 'port': dst_port} ]
 														, nx_pkt) )
 									found = True
