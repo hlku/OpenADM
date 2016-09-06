@@ -202,7 +202,7 @@ class Simulate:
 									break
 							#output to hosts
 							if not found:
-								for pairc in self.hosts_data:
+								for pair in self.hosts_data:
 									host = self.hosts_data[pair]
 									mac = pair[1]
 									sw = host.get('location', None)
